@@ -48,6 +48,19 @@
     <script src="../js/jquery.min.js"></script>
     <script src="../res/mui/js/mui.min.js"></script>
     <script>
+        // 获取地址参数，如果有参数url，则登陆成功后跳转至url参数所对应地址，如果没有url 默认跳转到首页
+        // 将多余的？去掉
+        var search = location.search.slice(1);
+        var reg = /url=(.+)/;
+        // 当匹配不到结果，match为null
+        var match = reg.exec(search);
+        console.log(match[1]);
+        // if(match){
+        //     match[1];
+        // }
+        // 逻辑运算的短路规则
+        var url = match && match[1];
+        url = url || '/';
         // 登陆功能
         $('form').on('submit', function () {
             // 1.获取用户输入表单信息
@@ -63,7 +76,7 @@
                     // 3.等待服务端响应结果
                     console.log(info);
                     // 4.处理登陆后的逻辑
-                    location.href = '/';
+                    location.href = url;
                 }
             });
             return false;//阻止表单提交的默认跳转事件

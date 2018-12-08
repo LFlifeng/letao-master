@@ -74,8 +74,7 @@
                     // 4.处理相应逻辑
                     console.log(info);
                     if(info.success){
-                        location.href = '/user/login.html';
-                        return;
+                      return location.href = '/user/login.html';
                     }
                     // 错误提示
                     alert(info.message);
