@@ -59,8 +59,8 @@
         //     match[1];
         // }
         // 逻辑运算的短路规则
-        var url = match && match[1];
-        url = url || '/';
+        var url = match && match[1]; //与运算有一个值为假，则整个式子为假
+        url = url || '/'; //或运算有一个值为真，则整个式子为真
         // 登陆功能
         $('form').on('submit', function () {
             // 1.获取用户输入表单信息
