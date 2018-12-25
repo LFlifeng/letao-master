@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html>
-
 <head lang="en">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0"/>
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="black" name="apple-mobile-web-app-status-bar-style">
     <meta content="telephone=no" name="format-detection">
     <title>传智云购-购物车</title>
     <link type="image/x-icon" rel="shortcut icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="res/mui/css/mui.min.css" />
-    <link rel="stylesheet" href="res/fontAwesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="css/common.css" />
-    <link rel="stylesheet" href="css/cart.css" />
+    <link rel="stylesheet" href="res/mui/css/mui.min.css"/>
+    <link rel="stylesheet" href="res/fontAwesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/cart.css"/>
 </head>
-
 <body>
     <div class="cz_layout">
         <header class="cz_topBar">
@@ -35,15 +33,19 @@
             <a class="tab_user fa fa-user" href="user/index.html"><span>会员中心</span></a>
         </footer>
     </div>
-    <script type="text/html" id="tpl">
-    {{each lists val}}
+    <!-- 自定义模板 -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/template-web.js"></script>
+    <script src="/res/mui/js/mui.min.js"></script>
+    <script type="text/template" id="tpl">
+        {{each lists val}}
         <li data-product="" class="mui-table-view-cell">
             <div class="mui-slider-right mui-disabled">
                 <a class="mui-btn mui-btn-blue">编辑</a>
                 <a class="mui-btn mui-btn-red">删除</a>
             </div>
             <a href="javascript:;" class="mui-navigate-right mui-slider-handle">
-                <img class="mui-media-object mui-pull-left" src="">
+                <img class="mui-media-object mui-pull-left" src="/api{{val.pic[0].picAddr}}">
                 <div class="mui-media-body">
                     <p class="name">{{val.proName}}</p>
                     <p class="info">
@@ -56,28 +58,21 @@
                 <input type="checkbox">
             </a>
         </li>
-    {{/each}}
+        {{/each}}
     </script>
-    <script src="./js/jquery.min.js"></script>
-    <script src="./js/template-web.js"></script>
-    <script src="res/mui/js/mui.min.js"></script>
-
     <script>
         // 获取购物车列表
-        // 1.发送请求
+        // 1. 发送请求
         $.ajax({
             url: '/api/cart/queryCart',
             type: 'get',
             success: function (info) {
-                // 2.等待服务端响应
-                // 3.处理数据
+                // 2. 等待响应
                 console.log(info);
-                // 未登录成功则跳转
-                // 若登陆成功时再次回到当前页面
-                // 因此地址跳转至登陆页时，将当前页面的地址以参数的形式传给login.html
-                if (info.error) {
+                // 3. 处理 json 数据
+                if(info.error) {
                     return mui.alert(
-                        '请先登录',
+                        '请先登录！',
                         '提示',
                         '确认',
                         function () {
@@ -85,48 +80,19 @@
                         }
                     );
                 }
+
+                // 获取购物列表成功
                 // 调用模板引擎
                 var html = template('tpl', {lists: info});
-                // 添加dom
+
+                // 添加DOM
                 $('#cart').html(html);
             }
-        });
-        mui(function () {
-            // mui.init();
-            // mui('.mui-table-view').on('tap', '.mui-btn-red', function () {
-            //     var btnArray = ['是', '否'];
-            //     mui.confirm('你要删除这件商品吗？', '温馨提示', btnArray, function (e) {
-            //         if (e.index == 0) {
-
-            //         } else {
-
-            //         }
-            //     })
-            // });
-            // mui('.mui-table-view').on('tap', '.mui-btn-blue', function (e) {
-            //     e.detail.gesture.preventDefault(); //修复iOS 8.x平台存在的bug，使用plus.nativeUI.prompt会造成输入法闪一下又没了
-            //     var btnArray = ['确定', '取消'];
-            //     var template = '<input type="number" placeholder="选择数量"/><br>' +
-            //         '<input type="text" placeholder="选择尺码" />';
-            //     mui.confirm(template, '编辑商品', btnArray, function (e) {
-            //         if (e.index == 0) {
-
-            //         } else {
-
-            //         }
-            //     })
-            // });
-            mui('.mui-scroll-wrapper').scroll({
-                scrollY: true, //是否竖向滚动
-                scrollX: false, //是否横向滚动
-                startX: 0, //初始化时滚动至x
-                startY: 0, //初始化时滚动至y
-                indicators: false, //是否显示滚动条
-                deceleration: 0.0006, //阻尼系数,系数越小滑动越灵敏
-                bounce: true, //是否启用回弹
-            });
+        })
+        
+        mui(function(){
+            mui('.mui-scroll-wrapper').scroll();
         });
     </script>
 </body>
-
 </html>
